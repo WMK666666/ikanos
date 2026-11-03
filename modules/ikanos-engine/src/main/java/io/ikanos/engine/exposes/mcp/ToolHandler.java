@@ -41,6 +41,7 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.core.JacksonException;
 import io.ikanos.spec.util.IkanosMappers;
+import io.ikanos.engine.execution.InputRequiredException;
 
 /**
  * Handles MCP tool calls by delegating to consumed HTTP operations.
@@ -283,7 +284,7 @@ public class ToolHandler {
 
             found = stepExecutor.execute(toolSpec.getCall(), toolSpec.getSteps(), parameters,
                     "Tool '" + toolName + "'");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | InputRequiredException e) {
             throw e;
         } catch (Exception e) {
             return errorResult("Error during consumed call",
@@ -319,7 +320,7 @@ public class ToolHandler {
             }
 
             return buildToolResult(toolSpec, result.lastResult);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | InputRequiredException e) {
             throw e;
         } catch (Exception e) {
             return errorResult("Error during aggregate function call",
